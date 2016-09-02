@@ -1,0 +1,68 @@
+﻿@using MVCBlog.Classes;
+@using MVCBlog.Models;
+
+@model IEnumerable<Post>
+
+@{
+    ViewBag.Title = "Posts";
+}
+
+<h2>Posts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+           Title
+        </th>
+        <th>
+           Content
+        </th>
+        <th>
+           Date
+        </th>
+        <th>
+           Author
+        </th>
+        <th>
+           Options
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Utils.CutText(item.Body,300)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+           @if(item.Author != null)
+           {
+               @item.Author.FullName
+           }
+
+        </td>
+        <td>
+            @if (User.IsInRole("Administrators") || (item.Author!=null && User.Identity.Name == item.Author.UserName))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
+            }
+
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+
+            @if (User.IsInRole("Administrators") || (item.Author != null && User.Identity.Name == item.Author.UserName))
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            }
+        </td>
+    </tr>
+}
+
+</table>

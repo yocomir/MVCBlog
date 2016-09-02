@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+@model  List<MVCBlog.Models.Post>
+<div class="home">
+    <aside class="aside_home">
+        <h2>Last Posts</h2>
+        <hr/>
+         <ul>
+             @foreach(var item in Model)
+             {
+                 <li><a href="/Posts/Details/@item.Id">@item.Title</a></li>
+             }
+         </ul>
+    </aside>
+    <section class="row">
+    @foreach (var post in Model.Take(3))
+    {    
+    <article class="post col-md-6">
+        <h2 class="title"><a href="/Posts/Details/@post.Id">@post.Title</a></h2>
+        <div class="about">
+            Posted on <i>@post.Date</i>
+            @if (post.Author != null)
+            {
+                @:by
+                <i>@post.Author.FullName (@post.Author.UserName)</i>
+            }
+            else
+            {
+                @:by
+                <i>(няма автор)</i>
+            }
+
+        </div>
+        <div class="body">
+            @MVCBlog.Classes.Utils.CutText(post.Body, 280)
+            <a href="/Posts/Details/@post.Id"><em>( Read more )</em></a>
+        </div>
+    </article>
+        }
+    </section>
+</div>    
+
+
+
